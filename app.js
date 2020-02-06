@@ -40,16 +40,17 @@ renderUsers();
 window.addEventListener("hashchange", ev => {
   ev.preventDefault();
   const userNumber = window.location.hash.slice(1);
-  fetchAll.then(users => {
-    console.log(users);
-    const clickedUser = users.find(user => {
-      console.log(userNumber);
-      console.log(user.number);
-      return parseInt(userNumber) === user.number;
-    });
-    console.log(clickedUser);
-    const i = clickedUser.number;
-    const html = `<div class="userContainer">
+  if (userNumber === "") {
+    renderUsers();
+  } else {
+    fetchAll.then(users => {
+      const clickedUser = users.find(user => {
+        return parseInt(userNumber) === user.number;
+      });
+
+      const i = clickedUser.number;
+
+      const html = `<div class="userContainer">
     <a class="number" href="#${i}">${i}</a>
     <div class="user${i}">
       <div class="userName">${clickedUser.fullName}</div>
@@ -59,8 +60,10 @@ window.addEventListener("hashchange", ev => {
       </div>
     </div>
   </div>`;
-    main.innerHTML = html;
-  });
+
+      main.innerHTML = html;
+    });
+  }
 });
 
 title.addEventListener("click", ev => {
